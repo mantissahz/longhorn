@@ -1,0 +1,13 @@
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+  name: default
+spec:
+  {{- if .Values.defaultSettings.backupTarget }}
+  backupTargetURL: {{ .Values.defaultSettings.backupTarget }}
+  {{- end }}
+  {{- if .Values.defaultSettings.defaultBackupTarbackupTargetCredentialSecretetSecret }}
+  credentialSecret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
+  {{- end }}
+  pollInterval: {{ .Values.defaultSettings.backupstorePollInterval | default "5m0s" }}

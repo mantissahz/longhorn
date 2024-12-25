@@ -120,7 +120,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Repository for the Longhorn UI image. |
 | image.longhorn.ui.tag | string | `"master-head"` | Tag for the Longhorn UI image. |
 | image.openshift.oauthProxy.repository | string | `""` | Repository for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users. |
-| image.openshift.oauthProxy.tag | float | `""` | Tag for the OAuth Proxy image. Specify OCP/OKD version 4.1 or later (including version 4.15, which is available at quay.io/openshift/origin-oauth-proxy:4.15). This setting applies only to OpenShift users. |
+| image.openshift.oauthProxy.tag | string | `""` | Tag for the OAuth Proxy image. Specify OCP/OKD version 4.1 or later (including version 4.15, which is available at quay.io/openshift/origin-oauth-proxy:4.15). This setting applies only to OpenShift users. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy that applies to all user-deployed Longhorn components, such as Longhorn Manager, Longhorn driver, and Longhorn UI. |
 
 ### Service Settings
@@ -141,6 +141,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.backingImage.enable | bool | `false` | Setting that allows you to use a backing image in a Longhorn StorageClass. |
 | persistence.backingImage.expectedChecksum | string | `nil` | Expected SHA-512 checksum of a backing image used in a Longhorn StorageClass. |
 | persistence.backingImage.name | string | `nil` | Backing image to be used for creating and restoring volumes in a Longhorn StorageClass. When no backing images are available, specify the data source type and parameters that Longhorn can use to create a backing image. |
+| persistence.dataEngine | string | `"v1"` | Setting that allows you to specify the data engine version for the default Longhorn StorageClass. (Options: "v1", "v2") |
 | persistence.defaultClass | bool | `true` | Setting that allows you to specify the default Longhorn StorageClass. |
 | persistence.defaultClassReplicaCount | int | `3` | Replica count of the default Longhorn StorageClass. |
 | persistence.defaultDataLocality | string | `"disabled"` | Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort") |
@@ -285,16 +286,16 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.backupCompressionMethod | Setting that allows you to specify a backup compression method. |
 | defaultSettings.backupConcurrentLimit | Maximum number of worker threads that can concurrently run for each backup. |
 | defaultSettings.backupExecutionTimeout | Number of minutes that Longhorn allows for the backup execution. The default value is "1". |
-| defaultSettings.backupTarget | Endpoint used to access the backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE") |
-| defaultSettings.backupTargetCredentialSecret | Name of the Kubernetes secret associated with the backup target. |
-| defaultSettings.backupstorePollInterval | Number of seconds that Longhorn waits before checking the backupstore for new backups. The default value is "300". When the value is "0", polling is disabled. |
+| defaultSettings.backupTarget | Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE") |
+| defaultSettings.backupTargetCredentialSecret | Name of the Kubernetes secret associated with the default backup target. |
+| defaultSettings.backupstorePollInterval | Number of seconds that Longhorn waits before checking the default backupstore for new backups. The default value is "5m0s". When the value is "0s", polling is disabled. |
 | defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | Maximum number of engines that are allowed to concurrently upgrade on each node after Longhorn Manager is upgraded. When the value is "0", Longhorn does not automatically upgrade volume engines to the new default engine image version. |
 | defaultSettings.concurrentReplicaRebuildPerNodeLimit | Maximum number of replicas that can be concurrently rebuilt on each node. |
 | defaultSettings.concurrentVolumeBackupRestorePerNodeLimit | Maximum number of volumes that can be concurrently restored on each node using a backup. When the value is "0", restoration of volumes using a backup is disabled. |
 | defaultSettings.createDefaultDiskLabeledNodes | Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster. |
 | defaultSettings.defaultDataLocality | Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume. |
 | defaultSettings.defaultDataPath | Default path for storing data on a host. The default value is "/var/lib/longhorn/". |
-| defaultSettings.defaultLonghornStaticStorageClass | Default name of Longhorn static StorageClass. The "storageClassName" is assigned to PVs and PVCs that are created for an existing Longhorn volume. The "storageClassName" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. The "storageClassName" needs to be an existing StorageClass. The default value is "longhorn-static". |
+| defaultSettings.defaultLonghornStaticStorageClass | Default name of Longhorn static StorageClass. "storageClassName" is assigned to PVs and PVCs that are created for an existing Longhorn volume. "storageClassName" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. "storageClassName" needs to be an existing StorageClass. The default value is "longhorn-static". |
 | defaultSettings.defaultReplicaCount | Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "3". |
 | defaultSettings.deletingConfirmationFlag | Flag that prevents accidental uninstallation of Longhorn. |
 | defaultSettings.detachManuallyAttachedVolumesWhenCordoned | Setting that allows automatic detaching of manually-attached volumes when a node is cordoned. |

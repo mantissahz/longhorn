@@ -5251,6 +5251,18 @@ spec:
 # Source: longhorn/templates/validate-psp-install.yaml
 #
 ---
+# Source: longhorn/templates/default-backuptarget.yaml
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.8.0-dev
+  name: default
+spec:
+  pollInterval: 5m0s
+---
 # Source: longhorn/templates/deployment-ui.yaml
 # https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
 # Create a proxy service account and ensure it will use the route "proxy"
